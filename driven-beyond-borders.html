@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Driven Beyond Borders — Smart Car Race @ Howest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:     #f8f6f2;
+  --white:  #ffffff;
+  --text:   #1c1c1c;
+  --muted:  #888;
+  --border: #e5e0d8;
+  --accent: #d4621a;
+  --r: 10px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; font-weight:400; line-height:1.7; overflow-x:hidden; }
+::selection { background:var(--accent); color:#fff; }
+
+/* ── NAV ── */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  display:flex; align-items:center; justify-content:center;
+  min-height:54px;
+  padding:.7rem 1rem;
+  background:transparent;
+}
+nav.scrolled {
+  background:transparent;
+}
+.nav-brand {
+  position:absolute; left:1.25rem;
+  font-family:'Playfair Display',serif; font-size:.9rem;
+  color:rgba(24,24,24,.94); text-decoration:none;
+  text-shadow:none;
+}
+.nav-brand span { color:var(--accent); }
+
+/* Inline nav links */
+.nav-links {
+  display:flex; align-items:center; justify-content:center;
+  gap:1rem; flex-wrap:wrap;
+}
+.nav-links a {
+  position:relative;
+  display:inline-block;
+  font-size:.64rem;
+  font-weight:500;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  text-decoration:none;
+  color:rgba(24,24,24,.9);
+  text-shadow:none;
+  transition:color .28s ease;
+}
+.nav-links a::after {
+  content:'';
+  position:absolute;
+  left:0;
+  bottom:-4px;
+  width:100%;
+  height:1px;
+  background:linear-gradient(90deg, rgba(24,24,24,0) 0%, rgba(24,24,24,.92) 45%, rgba(24,24,24,.92) 55%, rgba(24,24,24,0) 100%);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform .28s ease;
+}
+.nav-links a:hover { color:#ffd7b5; }
+.nav-links a:hover::after { transform:scaleX(1); }
+
+/* White nav only on hero area */
+nav.on-hero .nav-brand {
+  color:#fff;
+  text-shadow:0 1px 8px rgba(0,0,0,.55);
+}
+nav.on-hero .nav-links a {
+  color:rgba(255,255,255,.93);
+  text-shadow:0 1px 8px rgba(0,0,0,.5);
+}
+nav.on-hero .nav-links a::after {
+  background:linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.95) 45%, rgba(255,255,255,.95) 55%, rgba(255,255,255,0) 100%);
+}
+
+@media(max-width:740px) {
+  nav { padding:.6rem .75rem; }
+  .nav-brand { display:none; }
+  .nav-links { gap:.55rem .8rem; }
+  .nav-links a { font-size:.58rem; }
+}
+
+/* ── HERO ── */
+#hero {
+  position:relative; width:100%; height:100vh;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+}
+.hero-video {
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; object-position:center;
+}
+.hero-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(to bottom, rgba(0,0,0,.5) 0%, rgba(0,0,0,.35) 60%, rgba(0,0,0,.65) 100%);
+}
+.hero-content {
+  position:relative; z-index:2;
+  text-align:center; color:#fff;
+  padding:0 1.5rem;
+  animation:fadeUp .9s ease both;
+}
+@keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:none; } }
+.hero-tag {
+  display:inline-block; font-size:.7rem; font-weight:500;
+  letter-spacing:.14em; text-transform:uppercase;
+  color:rgba(255,255,255,.7); margin-bottom:1.25rem;
+}
+.hero-title {
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(3rem,7vw,6rem);
+  line-height:1.05; margin-bottom:1rem;
+}
+.hero-title em { font-style:italic; color:#f0934a; }
+.hero-sub {
+  font-size:clamp(.85rem,1.5vw,1rem); font-weight:300;
+  color:rgba(255,255,255,.7); max-width:420px; margin:0 auto 2rem;
+}
+.hero-btn {
+  display:inline-block; font-size:.78rem; font-weight:500;
+  letter-spacing:.06em; text-transform:uppercase;
+  background:var(--accent); color:#fff;
+  padding:.7rem 1.8rem; border-radius:6px; text-decoration:none;
+  transition:background .2s, transform .2s;
+}
+.hero-btn:hover { background:#f0934a; transform:translateY(-2px); }
+.hero-scroll {
+  position:absolute; bottom:2rem; left:50%; transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:.4rem;
+  color:rgba(255,255,255,.45); font-size:.65rem; letter-spacing:.12em; text-transform:uppercase;
+  z-index:2; animation:bounce 2s ease infinite;
+}
+@keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(5px)} }
+.hero-scroll::after { content:'↓'; font-size:.9rem; }
+
+/* ── WRAP ── */
+.wrap { max-width:960px; margin:0 auto; padding:0 2rem; }
+
+/* ── BLOG SECTION ── */
+#blog { padding:5rem 0 6rem; background:var(--bg); }
+.blog-heading { margin-bottom:2.5rem; }
+.blog-heading .sec-label { font-size:.68rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); margin-bottom:.4rem; }
+.blog-heading h2 { font-family:'Playfair Display',serif; font-size:2.45rem; line-height:1.15; color:#121212; letter-spacing:.01em; }
+
+.blog-list { display:flex; flex-direction:column; gap:1.25rem; }
+
+.bpost {
+  background:var(--white); border:1px solid #ece6dc; border-radius:14px;
+  display:grid; grid-template-columns:minmax(320px, 38%) 1fr; overflow:hidden;
+  transition:box-shadow .22s, transform .22s;
+}
+.bpost:hover { box-shadow:0 14px 34px rgba(15,20,33,.08); transform:translateY(-2px); }
+
+.bphoto {
+  background:#f2ede4; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:.6rem;
+  padding:1.1rem; border-right:1px solid #ece6dc; min-height:270px;
+}
+.pslot {
+  width:100%;
+  aspect-ratio:16/10;
+  border-radius:12px;
+  border:1.5px dashed #cbc2b2; background:#f7f2e8;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1rem; cursor:pointer; transition:border-color .22s, background .22s;
+  overflow:hidden;
+}
+.pslot:hover { border-color:var(--accent); background:#fde8d4; }
+.pslot img { width:100%; height:100%; object-fit:cover; display:block; }
+.pphoto-lbl { font-size:.62rem; color:#8a8277; letter-spacing:.09em; text-transform:uppercase; text-align:center; }
+
+.bbody { padding:1.8rem 2.1rem; display:flex; flex-direction:column; justify-content:center; }
+.bpost-meta { display:flex; align-items:center; gap:.65rem; margin-bottom:.95rem; }
+.bdaybadge { font-size:.62rem; font-weight:600; background:var(--accent); color:#fff; padding:.2rem .62rem; border-radius:99px; letter-spacing:.02em; }
+.bdaybadge.r { background:#c93f3f; }
+.bdate { font-size:.74rem; color:#878075; font-weight:500; }
+.bpost-title { font-family:'Playfair Display',serif; font-size:2rem; margin-bottom:.85rem; line-height:1.2; color:#101010; letter-spacing:.01em; }
+.bpost-text { font-size:.95rem; color:#464646; line-height:1.86; }
+.bpost-text p { margin-bottom:.55rem; }
+.bpost-text p:last-child { margin-bottom:0; }
+.read-more { display:inline-block; margin-top:1.05rem; font-size:.76rem; font-weight:600; color:var(--accent); text-decoration:none; letter-spacing:.03em; }
+.read-more:hover { text-decoration:underline; text-underline-offset:.2em; }
+
+@media(max-width:620px) {
+  .bpost { grid-template-columns:1fr; }
+  .bphoto { border-right:none; border-bottom:1px solid #ece6dc; min-height:auto; }
+  .bbody { padding:1.2rem 1.25rem 1.4rem; }
+  .bpost-title { font-size:1.55rem; }
+  .bpost-text { font-size:.9rem; }
+}
+
+/* ── INNER SECTIONS (shown via menu) ── */
+.inner-section {
+  display:none; min-height:100vh; padding:4.6rem 0 5rem; background:var(--bg);
+}
+.inner-section.active { display:block; }
+.sec-label { font-size:.68rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); margin-bottom:.5rem; }
+.sec-title { font-family:'DM Serif Display',serif; font-size:clamp(1.7rem,3vw,2.4rem); color:var(--text); margin-bottom:.75rem; }
+.sec-sub { font-size:.88rem; color:var(--muted); max-width:460px; line-height:1.8; margin-bottom:2rem; }
+.back-btn {
+  display:inline-flex; align-items:center; gap:.4rem;
+  font-size:.75rem; font-weight:500; color:var(--muted); text-decoration:none;
+  margin-bottom:2rem; cursor:pointer; background:none; border:none;
+  font-family:'DM Sans',sans-serif;
+}
+.back-btn:hover { color:var(--accent); }
+
+/* About */
+.about-grid { display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:start; }
+.about-body p { font-size:.88rem; color:#444; line-height:1.85; margin-bottom:.9rem; }
+.about-cards { display:flex; flex-direction:column; gap:.7rem; }
+.acard { background:var(--white); border:1px solid var(--border); border-radius:var(--r); padding:1rem 1.25rem; display:flex; gap:.85rem; align-items:flex-start; transition:border-color .2s; }
+.acard:hover { border-color:#f0934a; }
+.acard-icon { font-size:1.1rem; flex-shrink:0; }
+.acard h4 { font-size:.82rem; font-weight:500; margin-bottom:.2rem; }
+.acard p { font-size:.75rem; color:var(--muted); line-height:1.6; }
+@media(max-width:660px){ .about-grid { grid-template-columns:1fr; } }
+
+/* Schedule */
+.sched-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:.9rem; }
+.sday { background:var(--white); border:1px solid var(--border); border-radius:var(--r); overflow:hidden; transition:transform .2s, box-shadow .2s; }
+.sday:hover { transform:translateY(-3px); box-shadow:0 8px 20px rgba(0,0,0,.07); }
+.sday-head { padding:.8rem .9rem; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:.6rem; }
+.sday-num { width:26px; height:26px; border-radius:50%; background:var(--accent); color:#fff; font-size:.75rem; font-weight:500; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.sday-num.r { background:#c93f3f; }
+.sday-head .dn { font-size:.8rem; font-weight:500; }
+.sday-head .dd { font-size:.65rem; color:var(--muted); }
+.sday-body { padding:.9rem; display:flex; flex-direction:column; gap:.55rem; }
+.si { display:flex; gap:.5rem; align-items:flex-start; }
+.si .t { font-size:.6rem; color:var(--accent); white-space:nowrap; flex-shrink:0; font-weight:500; margin-top:.15rem; }
+.si .s { font-size:.73rem; color:#555; line-height:1.5; }
+.si.hi .s { color:var(--text); font-weight:500; }
+@media(max-width:860px){ .sched-grid { grid-template-columns:repeat(2,1fr); } }
+@media(max-width:440px){ .sched-grid { grid-template-columns:1fr; } }
+
+/* Team */
+.team-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.1rem; }
+.tcard { background:var(--white); border:1px solid var(--border); border-radius:var(--r); padding:1.5rem; text-align:center; display:flex; flex-direction:column; align-items:center; gap:.55rem; transition:box-shadow .2s, transform .2s; }
+.tcard:hover { box-shadow:0 6px 20px rgba(0,0,0,.07); transform:translateY(-3px); }
+.tavatar { width:56px; height:56px; border-radius:50%; background:#ede9e1; border:2px dashed #c8c0b4; display:flex; align-items:center; justify-content:center; font-size:1.4rem; }
+.tname { font-size:.88rem; font-weight:500; }
+.trole { font-size:.7rem; color:var(--accent); }
+.tcountry { font-size:.72rem; color:var(--muted); }
+.tdesc { font-size:.73rem; color:#888; line-height:1.6; }
+@media(max-width:620px){ .team-grid { grid-template-columns:repeat(2,1fr); } }
+
+/* Tech */
+.tech-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.1rem; }
+.techcard { background:var(--white); border:1px solid var(--border); border-radius:var(--r); padding:1.4rem; transition:border-color .2s, transform .2s; }
+.techcard:hover { border-color:#f0934a; transform:translateY(-2px); }
+.techcard-icon { font-size:1.5rem; margin-bottom:.75rem; }
+.techcard h3 { font-size:.84rem; font-weight:500; margin-bottom:.35rem; }
+.techcard p { font-size:.75rem; color:var(--muted); line-height:1.7; }
+@media(max-width:620px){ .tech-grid { grid-template-columns:repeat(2,1fr); } }
+
+/* International */
+.intl-grid { display:grid; grid-template-columns:1fr 1fr; gap:3.5rem; align-items:start; }
+.intl-points { list-style:none; display:flex; flex-direction:column; gap:.8rem; margin-top:1.25rem; }
+.intl-points li { font-size:.86rem; color:#555; line-height:1.75; display:flex; gap:.7rem; }
+.intl-points li::before { content:'→'; color:var(--accent); flex-shrink:0; }
+.intl-stats { display:grid; grid-template-columns:1fr 1fr; gap:.9rem; }
+.istat { background:var(--white); border:1px solid var(--border); border-radius:var(--r); padding:1.4rem; text-align:center; }
+.istat .n { font-family:'DM Serif Display',serif; font-size:2rem; color:var(--accent); }
+.istat .l { font-size:.67rem; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; margin-top:.1rem; }
+@media(max-width:660px){ .intl-grid { grid-template-columns:1fr; } }
+
+/* Reflection */
+.refl-wrap { max-width:640px; }
+.refl-body { font-size:.88rem; color:#555; line-height:1.9; }
+.refl-body p { margin-bottom:1rem; }
+.refl-body .lead { font-size:.98rem; color:var(--text); font-family:'DM Serif Display',serif; font-style:italic; border-left:3px solid var(--accent); padding-left:1.25rem; margin-bottom:1.5rem; }
+.quote-row { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-top:2.5rem; }
+.qcard { background:var(--white); border:1px solid var(--border); border-radius:var(--r); padding:1.1rem; }
+.qcard p { font-size:.78rem; color:#666; font-style:italic; line-height:1.7; }
+.qcard .qa { font-size:.65rem; color:var(--accent); margin-top:.55rem; font-weight:500; letter-spacing:.06em; text-transform:uppercase; }
+@media(max-width:540px){ .quote-row { grid-template-columns:1fr; } }
+
+/* ── FOOTER ── */
+footer { background:var(--bg); border-top:1px solid var(--border); padding:2rem 0; text-align:center; }
+.footer-brand { font-family:'DM Serif Display',serif; font-size:1rem; color:var(--text); margin-bottom:.5rem; }
+.footer-brand span { color:var(--accent); }
+.footer-copy { font-size:.7rem; color:#bbb; }
+
+/* ── FADE IN ── */
+.fi { opacity:0; transform:translateY(18px); transition:opacity .5s ease, transform .5s ease; }
+.fi.vis { opacity:1; transform:none; }
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+
+/* ── PROGRESS BAR ── */
+.prog { position:fixed; top:0; left:0; height:2px; background:var(--accent); z-index:999; transition:width .1s; width:0; }
+</style>
+</head>
+<body>
+
+<div class="prog" id="prog"></div>
+
+<!-- ────────── NAV ────────── -->
+<nav id="mainNav" class="on-hero">
+  <a href="#" class="nav-brand" onclick="showMain(); return false;">SmartCarRace'26</a>
+  <div class="nav-links">
+    <a href="#" onclick="showMain(); return false;">Blog</a>
+    <a href="#" onclick="showSection('about'); return false;">About</a>
+    <a href="#" onclick="showSection('schedule'); return false;">Schedule</a>
+    <a href="#" onclick="showSection('team'); return false;">Team</a>
+    <a href="#" onclick="showSection('tech'); return false;">Tech</a>
+    <a href="#" onclick="showSection('international'); return false;">International</a>
+    <a href="#" onclick="showSection('reflection'); return false;">Reflection</a>
+  </div>
+</nav>
+
+<!-- ────────── MAIN CONTENT ────────── -->
+<div id="mainContent">
+
+  <!-- HERO -->
+  <section id="hero">
+    <!--
+      REPLACE THE VIDEO SOURCE BELOW WITH YOUR OWN VIDEO FILE.
+      Example: <source src="your-video.mp4" type="video/mp4"/>
+      The video will autoplay, loop forever and stay muted (required by browsers).
+    -->
+    <video class="hero-video" autoplay muted loop playsinline poster="">
+      <source src="" type="video/mp4"/>
+    </video>
+    <!-- Fallback gradient shown when no video is loaded -->
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1a1a2e 0%,#2d1a0e 50%,#1a1a2e 100%);z-index:0;" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <div class="hero-tag">Howest · BUSIT International Week · 30 Mar – 3 Apr 2026</div>
+      <h1 class="hero-title">Driven<br/><em>Beyond</em> Borders</h1>
+      <p class="hero-sub">International teamwork, Raspberry Pi engineering and autonomous smart car racing in Bruges.</p>
+      <a href="#blog" class="hero-btn">Read the Blog</a>
+    </div>
+
+    <div class="hero-scroll">scroll</div>
+  </section>
+
+  <!-- BLOG -->
+  <section id="blog">
+    <div class="wrap">
+      <div class="blog-heading fi">
+        <div class="sec-label">Daily Blog</div>
+        <h2>Five days, one journey</h2>
+      </div>
+      <div class="blog-list">
+
+        <article class="bpost fi d1">
+          <div class="bphoto">
+            <div class="pslot" title="Click to add cover photo">📷</div>
+            <p class="pphoto-lbl">Day 1 cover photo</p>
+          </div>
+          <div class="bbody">
+            <div class="bpost-meta"><span class="bdaybadge">Day 1</span><span class="bdate">Monday, 30 March 2026</span></div>
+            <h2 class="bpost-title">Building the Team Behind the Car</h2>
+            <div class="bpost-text">
+              <p>The week began with the kick-off and meet-and-greet — students from different countries quickly finding common ground through a shared passion for technology.</p>
+              <p>By the afternoon, each team had established its structure: who handles hardware, who writes the software, and who leads testing. The project had officially started.</p>
+            </div>
+            <a href="#" class="read-more" onclick="showSection('reflection')">Continue reading →</a>
+          </div>
+        </article>
+
+        <article class="bpost fi d2">
+          <div class="bphoto">
+            <div class="pslot" title="Click to add cover photo">📷</div>
+            <p class="pphoto-lbl">Day 2 cover photo</p>
+          </div>
+          <div class="bbody">
+            <div class="bpost-meta"><span class="bdaybadge">Day 2</span><span class="bdate">Tuesday, 31 March 2026</span></div>
+            <h2 class="bpost-title">From Ideas to First Technical Progress</h2>
+            <div class="bpost-text">
+              <p>Planning gave way to hands-on engineering. The team wired up the Raspberry Pi, connected the sensors, and ran their first commands — modest but meaningful progress.</p>
+              <p>The afternoon introduced the autonomous driving framework and sparked the team's first real technical discussion about priorities and trade-offs.</p>
+            </div>
+            <a href="#" class="read-more">Continue reading →</a>
+          </div>
+        </article>
+
+        <article class="bpost fi d3">
+          <div class="bphoto">
+            <div class="pslot" title="Click to add cover photo">📷</div>
+            <p class="pphoto-lbl">Day 3 cover photo</p>
+          </div>
+          <div class="bbody">
+            <div class="bpost-meta"><span class="bdaybadge">Day 3</span><span class="bdate">Wednesday, 1 April 2026</span></div>
+            <h2 class="bpost-title">Testing, Adjusting and Learning Through Practice</h2>
+            <div class="bpost-text">
+              <p>Wednesday was the most iterative day: run the car, observe what fails, fix it, repeat. Each cycle revealed something new about how the sensors behaved in real conditions.</p>
+              <p>The afternoon sport activity gave the team a break from the screens — and the group returned noticeably more cohesive.</p>
+            </div>
+            <a href="#" class="read-more">Continue reading →</a>
+          </div>
+        </article>
+
+        <article class="bpost fi d4">
+          <div class="bphoto">
+            <div class="pslot" title="Click to add cover photo">📷</div>
+            <p class="pphoto-lbl">Day 4 cover photo</p>
+          </div>
+          <div class="bbody">
+            <div class="bpost-meta"><span class="bdaybadge">Day 4</span><span class="bdate">Thursday, 2 April 2026</span></div>
+            <h2 class="bpost-title">Final Improvements Before the Race</h2>
+            <div class="bpost-text">
+              <p>Working at MaM, the team focused entirely on stability: tuning parameters, resolving final bugs and building confidence ahead of Friday's race.</p>
+              <p>The evening brought a boat trip through Bruges' canals and a farewell dinner — a perfect contrast to the intensity of the day.</p>
+            </div>
+            <a href="#" class="read-more">Continue reading →</a>
+          </div>
+        </article>
+
+        <article class="bpost fi d4">
+          <div class="bphoto">
+            <div class="pslot" title="Click to add cover photo">📷</div>
+            <p class="pphoto-lbl">Day 5 cover photo</p>
+          </div>
+          <div class="bbody">
+            <div class="bpost-meta"><span class="bdaybadge r">Day 5</span><span class="bdate">Friday, 3 April 2026</span></div>
+            <h2 class="bpost-title">Race Day: Pressure, Performance and Reflection</h2>
+            <div class="bpost-text">
+              <p>Four days of work came down to one morning. Watching the car navigate the track autonomously — running code the team had written together — was genuinely rewarding.</p>
+              <p>Certificates, closing words and final goodbyes wrapped up a week that proved what an international team can achieve in five days.</p>
+            </div>
+            <a href="#" class="read-more" onclick="showSection('reflection')">Read the full reflection →</a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-brand">Driven <span>Beyond</span> Borders</div>
+      <p class="footer-copy">International BUSIT Week @ Howest · 30 March – 3 April 2026 · Bruges, Belgium</p>
+    </div>
+  </footer>
+
+</div><!-- end mainContent -->
+
+<!-- ════════════ INNER SECTIONS ════════════ -->
+
+<!-- ABOUT -->
+<div class="inner-section" id="sec-about">
+  <div class="wrap">
+    <button class="back-btn" onclick="showMain()">← Back to Blog</button>
+    <div class="about-grid">
+      <div>
+        <div class="sec-label">About the Project</div>
+        <h2 class="sec-title">Engineering meets international collaboration</h2>
+        <div class="about-body">
+          <p>The International BUSIT Week brought students from across Europe together for five days of hands-on engineering. The challenge: design, develop and race an autonomous smart car — all within one week.</p>
+          <p>Teams worked with Raspberry Pi-powered vehicles, custom sensors and autonomous driving logic, while collaborating across language and cultural boundaries.</p>
+        </div>
+      </div>
+      <div class="about-cards">
+        <div class="acard"><div class="acard-icon">🤖</div><div><h4>Raspberry Pi</h4><p>On-board computing for sensor processing and autonomous navigation.</p></div></div>
+        <div class="acard"><div class="acard-icon">🌍</div><div><h4>International Teamwork</h4><p>Collaborating with peers from different countries, working entirely in English.</p></div></div>
+        <div class="acard"><div class="acard-icon">🏁</div><div><h4>Smart Car Race</h4><p>A final competitive race as the culmination of the week's work.</p></div></div>
+        <div class="acard"><div class="acard-icon">🔧</div><div><h4>Test &amp; Iterate</h4><p>Structured debugging cycles and rapid improvements throughout the week.</p></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCHEDULE -->
+<div class="inner-section" id="sec-schedule">
+  <div class="wrap">
+    <button class="back-btn" onclick="showMain()">← Back to Blog</button>
+    <div class="sec-label">Programme</div>
+    <h2 class="sec-title">The week at a glance</h2>
+    <p class="sec-sub">From kick-off to the final race — five structured days in Bruges.</p>
+    <div class="sched-grid">
+      <div class="sday"><div class="sday-head"><div class="sday-num">1</div><div><div class="dn">Monday</div><div class="dd">30 March</div></div></div><div class="sday-body"><div class="si hi"><div class="t">09:00</div><div class="s">Kick-off &amp; Meet &amp; Greet</div></div><div class="si"><div class="t">10:30</div><div class="s">Opening sessions</div></div><div class="si"><div class="t">13:00</div><div class="s">Sessions &amp; project work</div></div></div></div>
+      <div class="sday"><div class="sday-head"><div class="sday-num">2</div><div><div class="dn">Tuesday</div><div class="dd">31 March</div></div></div><div class="sday-body"><div class="si"><div class="t">09:30</div><div class="s">Sessions &amp; project work</div></div><div class="si"><div class="t">13:00</div><div class="s">Sessions &amp; project work</div></div></div></div>
+      <div class="sday"><div class="sday-head"><div class="sday-num">3</div><div><div class="dn">Wednesday</div><div class="dd">1 April</div></div></div><div class="sday-body"><div class="si"><div class="t">09:30</div><div class="s">Sessions &amp; project work</div></div><div class="si hi"><div class="t">13:30</div><div class="s">🏅 Sport activity</div></div></div></div>
+      <div class="sday"><div class="sday-head"><div class="sday-num">4</div><div><div class="dn">Thursday</div><div class="dd">2 April</div></div></div><div class="sday-body"><div class="si"><div class="t">09:30</div><div class="s">Full-day work at MaM</div></div><div class="si hi"><div class="t">17:30</div><div class="s">⛵ Boat trip, Bruges</div></div><div class="si hi"><div class="t">19:00</div><div class="s">🍽️ Farewell dinner</div></div></div></div>
+      <div class="sday"><div class="sday-head"><div class="sday-num r">5</div><div><div class="dn">Friday</div><div class="dd">3 April</div></div></div><div class="sday-body"><div class="si hi"><div class="t">09:30</div><div class="s">🏎️ Smart Car Race</div></div><div class="si hi"><div class="t">After</div><div class="s">🎓 Closing &amp; certificates</div></div><div class="si"><div class="t">12:00</div><div class="s">End of project</div></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TEAM -->
+<div class="inner-section" id="sec-team">
+  <div class="wrap">
+    <button class="back-btn" onclick="showMain()">← Back to Blog</button>
+    <div class="sec-label">The Team</div>
+    <h2 class="sec-title">The people behind the car</h2>
+    <p class="sec-sub">Replace the placeholders below with your real names, roles and countries.</p>
+    <div class="team-grid">
+      <div class="tcard"><div class="tavatar">👤</div><div class="tname">Team Member 1</div><div class="trole">Role / Specialisation</div><div class="tcountry">🌍 Country</div><p class="tdesc">Brief description of this member's contribution.</p></div>
+      <div class="tcard"><div class="tavatar">👤</div><div class="tname">Team Member 2</div><div class="trole">Role / Specialisation</div><div class="tcountry">🌍 Country</div><p class="tdesc">Brief description of this member's contribution.</p></div>
+      <div class="tcard"><div class="tavatar">👤</div><div class="tname">Team Member 3</div><div class="trole">Role / Specialisation</div><div class="tcountry">🌍 Country</div><p class="tdesc">Brief description of this member's contribution.</p></div>
+      <div class="tcard"><div class="tavatar">👤</div><div class="tname">Team Member 4</div><div class="trole">Role / Specialisation</div><div class="tcountry">🌍 Country</div><p class="tdesc">Brief description of this member's contribution.</p></div>
+      <div class="tcard"><div class="tavatar">👤</div><div class="tname">Team Member 5</div><div class="trole">Role / Specialisation</div><div class="tcountry">🌍 Country</div><p class="tdesc">Brief description of this member's contribution.</p></div>
+      <div class="tcard"><div class="tavatar">👤</div><div class="tname">Team Member 6</div><div class="trole">Role / Specialisation</div><div class="tcountry">🌍 Country</div><p class="tdesc">Brief description of this member's contribution.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- TECH -->
+<div class="inner-section" id="sec-tech">
+  <div class="wrap">
+    <button class="back-btn" onclick="showMain()">← Back to Blog</button>
+    <div class="sec-label">Technical Highlights</div>
+    <h2 class="sec-title">What powered the car</h2>
+    <p class="sec-sub" style="margin-bottom:2rem">The key engineering components behind the Smart Car Race project.</p>
+    <div class="tech-grid">
+      <div class="techcard"><div class="techcard-icon">🖥️</div><h3>Raspberry Pi</h3><p>The car's brain — processing sensor data and executing autonomous navigation in real time.</p></div>
+      <div class="techcard"><div class="techcard-icon">📡</div><h3>Sensor Integration</h3><p>Distance, line-detection and camera sensors provided live environmental awareness.</p></div>
+      <div class="techcard"><div class="techcard-icon">🧠</div><h3>Autonomous Logic</h3><p>Custom algorithms translated sensor input into precise steering and speed decisions.</p></div>
+      <div class="techcard"><div class="techcard-icon">🔧</div><h3>Testing &amp; Debugging</h3><p>Structured test cycles isolated bugs and incrementally improved system reliability.</p></div>
+      <div class="techcard"><div class="techcard-icon">🏁</div><h3>Race Preparation</h3><p>Final tuning focused on consistency and edge-case handling ahead of competition day.</p></div>
+      <div class="techcard"><div class="techcard-icon">🤝</div><h3>Team Problem-Solving</h3><p>Technical decisions made collectively, combining each member's academic background.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- INTERNATIONAL -->
+<div class="inner-section" id="sec-international">
+  <div class="wrap">
+    <button class="back-btn" onclick="showMain()">← Back to Blog</button>
+    <div class="intl-grid">
+      <div>
+        <div class="sec-label">International Experience</div>
+        <h2 class="sec-title">Where engineering meets the world</h2>
+        <p style="font-size:.86rem;color:#666;margin-top:.75rem;line-height:1.8">Working with peers from different countries enriched every part of the project — from initial planning to the final race.</p>
+        <ul class="intl-points">
+          <li>Diverse academic backgrounds consistently produced stronger outcomes.</li>
+          <li>Working entirely in English developed sharper communication skills.</li>
+          <li>The boat trip through Bruges created a shared memory beyond the project.</li>
+          <li>Friendships built during the week have real potential for future collaboration.</li>
+        </ul>
+      </div>
+      <div class="intl-stats">
+        <div class="istat"><div class="n">5</div><div class="l">Days</div></div>
+        <div class="istat"><div class="n" style="font-size:2rem">🌐</div><div class="l">Countries</div></div>
+        <div class="istat"><div class="n">1</div><div class="l">Language</div></div>
+        <div class="istat"><div class="n" style="font-size:2rem">🏁</div><div class="l">Final Race</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REFLECTION -->
+<div class="inner-section" id="sec-reflection">
+  <div class="wrap">
+    <button class="back-btn" onclick="showMain()">← Back to Blog</button>
+    <div class="refl-wrap">
+      <div class="sec-label">Final Reflection</div>
+      <h2 class="sec-title">What we built was more than a car</h2>
+      <div class="refl-body" style="margin-top:1.75rem">
+        <p class="lead">"Five days is not a long time — yet within those five days, we designed, built, tested and raced an autonomous smart car as an international team."</p>
+        <p>The project challenged us in ways that a standard classroom exercise cannot replicate. Debugging a non-responsive sensor at the end of a long day, negotiating technical approaches across language barriers, making decisions under time pressure — these are the conditions that real engineering demands.</p>
+        <p>We left with stronger technical skills in embedded systems and autonomous control. We left with better communication abilities, developed through five days of working exclusively in English. And we left with a deeper appreciation for international collaboration — something no lecture can fully teach.</p>
+        <p>The Smart Car Race was the culmination of the week, but the most important result was demonstrating that an international team, meeting for the first time, can produce something genuinely meaningful in five days.</p>
+      </div>
+      <div class="quote-row">
+        <div class="qcard"><p>"Add a personal quote or key takeaway from this team member."</p><div class="qa">— Team Member 1</div></div>
+        <div class="qcard"><p>"Add a personal quote or key takeaway from this team member."</p><div class="qa">— Team Member 2</div></div>
+        <div class="qcard"><p>"Add a personal quote or key takeaway from this team member."</p><div class="qa">— Team Member 3</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Always start from top on refresh/load
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  window.addEventListener('load', () => {
+    window.scrollTo(0, 0);
+  });
+
+  function updateNavTheme() {
+    const nav = document.getElementById('mainNav');
+    const mainVisible = document.getElementById('mainContent').style.display !== 'none';
+    const inHeroZone = mainVisible && window.scrollY < (window.innerHeight * 0.72);
+    nav.classList.toggle('on-hero', inHeroZone);
+  }
+
+  // ── scroll progress & nav style ──
+  window.addEventListener('scroll', () => {
+    const p = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+    document.getElementById('prog').style.width = p + '%';
+    updateNavTheme();
+  });
+
+  // ── show inner section ──
+  function showSection(id) {
+    // hide main
+    document.getElementById('mainContent').style.display = 'none';
+    // hide all sections
+    document.querySelectorAll('.inner-section').forEach(s => s.classList.remove('active'));
+    // show target
+    document.getElementById('sec-' + id).classList.add('active');
+    window.scrollTo(0, 0);
+    updateNavTheme();
+  }
+
+  // ── show main ──
+  function showMain() {
+    document.querySelectorAll('.inner-section').forEach(s => s.classList.remove('active'));
+    document.getElementById('mainContent').style.display = '';
+    window.scrollTo(0, 0);
+    updateNavTheme();
+  }
+
+  // ── fade-in observer ──
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+
+  // ── photo upload ──
+  document.querySelectorAll('.pslot').forEach(slot => {
+    slot.addEventListener('click', e => {
+      e.preventDefault();
+      const inp = document.createElement('input');
+      inp.type = 'file'; inp.accept = 'image/*';
+      inp.onchange = ev => {
+        const url = URL.createObjectURL(ev.target.files[0]);
+        const img = document.createElement('img');
+        img.src = url;
+        slot.innerHTML = '';
+        slot.appendChild(img);
+        slot.style.border = 'none';
+      };
+      inp.click();
+    });
+  });
+
+  // ── hide fallback bg once video loads ──
+  document.querySelector('.hero-video').addEventListener('loadeddata', () => {
+    document.getElementById('heroBg').style.display = 'none';
+  });
+
+  updateNavTheme();
+
+</script>
+</body>
+</html>
